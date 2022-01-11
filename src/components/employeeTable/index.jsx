@@ -1,5 +1,5 @@
 import { API } from '../../api';
-import React, { useEffect } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import EmployeeRow from './EmployeeRow'
 import { useEmployeeSystemContext } from '../../context/employeeContext'
 import noData from '../../assets/nodata.png'
@@ -12,14 +12,13 @@ export default function EmployeeTable() {
     /**
       * Called to fetch employees
       */
-    const fetchEmployeesData = () => {
-
+    const fetchEmployeesData = useCallback(() => {
         API.getEmployees().then(payload => {
             dispatch({ type: 'GET_EMPLOYEES', payload })
         }).catch(() => {
             alert("Something went wrong, Check console for more details");
         })
-    }
+    }, [dispatch])
 
     /**
     * Called to add employee
@@ -35,7 +34,7 @@ export default function EmployeeTable() {
 
     useEffect(() => {
         fetchEmployeesData()
-    }, [])
+    }, [fetchEmployeesData])
 
     return (
         <div className='general-container employee-table'>
